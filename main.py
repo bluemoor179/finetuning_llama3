@@ -114,7 +114,7 @@ sft_config = SFTConfig(
 
 trainer = SFTTrainer(
     model=model,
-    train_dataset=dataset,
+    train_dataset=dataset.select([0, 10, 20, 30, 40, 50]),
     args=sft_config,
     peft_config=peft_params,
     tokenizer=tokenizer,

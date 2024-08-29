@@ -47,7 +47,7 @@ PS C:\Projects\finetuning_llama3\flash_attn_wheels-1.0.9> python setup.py instal
 
 ```
 Package            Version
------------------- -----------
+------------------ ------------
 accelerate         0.33.0
 aiohappyeyeballs   2.4.0
 aiohttp            3.10.5
@@ -60,23 +60,27 @@ colorama           0.4.6
 datasets           2.21.0
 dill               0.3.8
 docstring_parser   0.16
-filelock           3.15.4
+einops             0.8.0
+filelock           3.13.1
+flash_attn         2.6.3
 frozenlist         1.4.1
-fsspec             2024.6.1
+fsspec             2024.2.0
 huggingface-hub    0.24.6
 idna               3.8
-Jinja2             3.1.4
+Jinja2             3.1.3
 markdown-it-py     3.0.0
 MarkupSafe         2.1.5
 mdurl              0.1.2
 mpmath             1.3.0
 multidict          6.0.5
 multiprocess       0.70.16
-networkx           3.3
-numpy              1.26.4
+networkx           3.2.1
+ninja              1.11.1.1
+numpy              1.26.3
 packaging          24.1
 pandas             2.2.2
 peft               0.12.0
+pillow             10.2.0
 pip                24.2
 protobuf           5.28.0
 psutil             6.0.0
@@ -92,17 +96,20 @@ safetensors        0.4.4
 setuptools         65.5.0
 shtab              1.7.1
 six                1.16.0
-sympy              1.13.2
+sympy              1.12
 tensorboardX       2.6.2.2
 tokenizers         0.19.1
-torch              2.4.0
+torch              2.4.0+cu121
+torchaudio         2.4.0+cu121
+torchvision        0.19.0+cu121
 tqdm               4.66.5
 transformers       4.44.2
 trl                0.9.6
-typing_extensions  4.12.2
+typing_extensions  4.9.0
 tyro               0.8.10
 tzdata             2024.1
 urllib3            2.2.2
+wheel              0.44.0
 xxhash             3.5.0
 yarl               1.9.4
 ```

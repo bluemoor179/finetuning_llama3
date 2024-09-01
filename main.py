@@ -36,6 +36,8 @@ quant_config = BitsAndBytesConfig(
 model = AutoModelForCausalLM.from_pretrained(
     llama
     , quantization_config=quant_config
+    , torch_dtype=torch.bfloat16
+    , attn_implementation="flash_attention_2"
     , local_files_only=True)
 model.config.use_cache = False
 model.config.pretraining_tp = 1

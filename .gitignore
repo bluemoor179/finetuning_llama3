@@ -3,3 +3,4 @@ meta-llama/
 uiyoung/
 results/
 flash_attn_wheels-1.0.9/
+*.whl

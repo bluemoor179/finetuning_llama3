@@ -4,8 +4,8 @@ import torch
 result = "./results/checkpoint-20"
 
 pipeline = transformers.pipeline("text-generation", model=result, model_kwargs={"torch_dtype": torch.bfloat16, "attn_implementation":"flash_attention_2"}, device_map="auto")
-a = pipeline("벽에 걸린 괘종시계가 8시를 알리며 둔한 종소리를 내기 시작했다. 그리고 그와 동시에 문이 열리고 그곳으로 한 남자가 걸어 들어왔다. 전신을 둘러싼 검은 코드 안쪽에 얼핏 비치는 복장은 틀림없는 가톨릭 사제복이다. 비록 술을 금하지는 않지만 경건한 가톨릭의 사제가 직접 바를 찾아온다는 것은 그다지 흔치 않은 일이었다. 더구나 은발의 외국인 젊은이라면."
-             , max_length=1000)
+a = pipeline("벽에 걸린 괘종시계가 8시를 알리며 둔한 종소리를 내기 시작했다. 그리고 그와 동시에 문이 열리고 그곳으로 한 남자가 걸어 들어왔다. 전신을 둘러싼 검은 코드 안쪽에 얼핏 비치는 복장은 틀림없는 가톨릭 사제복이다."
+             , max_length=100)
 print(a)
 
 

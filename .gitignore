@@ -1,8 +1,7 @@
 .venv
 meta-llama/
 uiyoung/
-results/
-results2/
+results*/
 flash_attn_wheels-1.0.9/
 resources/
 *.whl

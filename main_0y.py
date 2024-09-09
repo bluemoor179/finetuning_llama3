@@ -38,7 +38,7 @@ model = AutoModelForCausalLM.from_pretrained(
     llama
     , quantization_config=quant_config
     # , torch_dtype=torch.bfloat16
-    , attn_implementation="flash_attention_2"
+    # , attn_implementation="flash_attention_2"
     # , low_cpu_mem_usage=True
     , local_files_only=True)
 model.config.use_cache = False
@@ -84,30 +84,30 @@ training_params = TrainingArguments(
 )
 
 # Dataset load
-# from datasets import load_dataset
-# hkcode_dataset = "uiyong/gemini_result_kospi_0517_jsonl"
-# dataset = load_dataset(hkcode_dataset, split="train")
+from datasets import load_dataset
+hkcode_dataset = "uiyong/gemini_result_kospi_0517_jsonl"
+dataset = load_dataset(hkcode_dataset, split="train")
 
-from datasets import Dataset
-def gen():
-    with open('./resources/납골당의 어린왕자/01. 납골당의 어린왕자/001화.txt', 'r', encoding='UTF8') as file :
-        isFirst = True
-        current_string = ""
-        while True:
-            line = file.readline()
-            if not line:
-                if len(tokenizer.tokenize(current_string)) > 0:
-                    yield {"text": current_string}
-                break
-            if isFirst:
-                isFirst = False
-                if len(tokenizer.tokenize(line)) > 0:
-                    yield {"text": line}
-            else:
-                if len(tokenizer.tokenize(current_string + line)) > 0:
-                    yield {"text": current_string + line}
-            current_string = line
-dataset = Dataset.from_generator(gen)
+# from datasets import Dataset
+# def gen():
+#     with open('./resources/납골당의 어린왕자/01. 납골당의 어린왕자/001화.txt', 'r', encoding='UTF8') as file :
+#         isFirst = True
+#         current_string = ""
+#         while True:
+#             line = file.readline()
+#             if not line:
+#                 if len(tokenizer.tokenize(current_string)) > 0:
+#                     yield {"text": current_string}
+#                 break
+#             if isFirst:
+#                 isFirst = False
+#                 if len(tokenizer.tokenize(line)) > 0:
+#                     yield {"text": line}
+#             else:
+#                 if len(tokenizer.tokenize(current_string + line)) > 0:
+#                     yield {"text": current_string + line}
+#             current_string = line
+# dataset = Dataset.from_generator(gen)
 
 print('dataset load')
 
@@ -139,8 +139,8 @@ sft_config = SFTConfig(
 
 trainer = SFTTrainer(
     model=model,
-    # train_dataset=dataset.select([0, 10, 20, 30, 40, 50]),
-    train_dataset=dataset.select([0, 1, 2, 3, 4, 5]),
+    train_dataset=dataset.select([0, 10, 20, 30, 40, 50]),
+    # train_dataset=dataset.select([0, 1, 2, 3, 4, 5]),
     # train_dataset=dataset.select([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]),
     # train_dataset=dataset,
     args=sft_config,

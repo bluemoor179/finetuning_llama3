@@ -38,7 +38,7 @@ model = AutoModelForCausalLM.from_pretrained(
     llama
     , quantization_config=quant_config
     # , torch_dtype=torch.bfloat16
-    , attn_implementation="flash_attention_2"
+    # , attn_implementation="flash_attention_2"
     # , low_cpu_mem_usage=True
     , local_files_only=True)
 model.config.use_cache = False

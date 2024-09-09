@@ -2,6 +2,7 @@
 meta-llama/
 uiyoung/
 results/
+results2/
 flash_attn_wheels-1.0.9/
 resources/
 *.whl

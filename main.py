@@ -116,7 +116,7 @@ from trl import SFTTrainer, SFTConfig
 
 sft_config = SFTConfig(
     output_dir="./results3",
-    num_train_epochs=15, # Total number of training epochs to perform (if not an integer, will perform the decimal part percents of the last epoch before stopping training).
+    num_train_epochs=1, # Total number of training epochs to perform (if not an integer, will perform the decimal part percents of the last epoch before stopping training).
     per_device_train_batch_size=4, # The batch size per GPU/XPU/TPU/MPS/NPU core/CPU for training.
     gradient_accumulation_steps=1, # Number of updates steps to accumulate the gradients for, before performing a backward/update pass.
     optim="paged_adamw_32bit", #The optimizer to use: adamw_hf, adamw_torch, adamw_torch_fused, adamw_apex_fused, adamw_anyprecision or adafactor.

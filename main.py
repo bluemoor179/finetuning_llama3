@@ -61,6 +61,13 @@ peft_params = LoraConfig(
     bias="none",
     task_type="CAUSAL_LM",
 )
+# peft_params = LoraConfig(
+#     lora_alpha=32,
+#     lora_dropout=0.1,
+#     r=16,
+#     bias="none",
+#     task_type="CAUSAL_LM",
+# )
 
 # 학습 모델 설정
 training_params = TrainingArguments(
@@ -89,24 +96,36 @@ training_params = TrainingArguments(
 # dataset = load_dataset(hkcode_dataset, split="train")
 
 from datasets import Dataset
+# def gen():
+#     with open('./resources/납골당의 어린왕자/01. 납골당의 어린왕자/001화.txt', 'r', encoding='UTF8') as file :
+#         lines = file.readlines()
+#         for i in range(0, len(lines)):
+#             # print(lines[i])
+#             current_string = lines[i]
+#             if len(tokenizer.tokenize(current_string)) > 0:
+#                 # print(str(len(tokenizer.tokenize(current_string))))
+#                 yield {"text": current_string}
+#             for j in range(i + 1, len(lines)):
+#                 current_string += lines[j]
+#                 if len(tokenizer.tokenize(current_string)) > 512:
+#                     break
+#                 if len(tokenizer.tokenize(current_string)) > 0:
+#                     # print(str(len(tokenizer.tokenize(current_string))))
+#                     yield {"text": current_string}
+
 def gen():
     with open('./resources/납골당의 어린왕자/01. 납골당의 어린왕자/001화.txt', 'r', encoding='UTF8') as file :
-        isFirst = True
-        current_string = ""
-        while True:
-            line = file.readline()
-            if not line:
-                if len(tokenizer.tokenize(current_string)) > 0:
-                    yield {"text": current_string}
-                break
-            if isFirst:
-                isFirst = False
-                if len(tokenizer.tokenize(line)) > 0:
-                    yield {"text": line}
-            else:
-                if len(tokenizer.tokenize(current_string + line)) > 0:
-                    yield {"text": current_string + line}
-            current_string = line
+        lines = file.readlines()
+        for i in range(0, len(lines)):
+            # print(lines[i])
+            current_string = lines[i]
+            for j in range(i + 1, len(lines)):
+                if len(tokenizer.tokenize(current_string)) > 1024:
+                    break
+                current_string += lines[j]
+            if len(tokenizer.tokenize(current_string)) > 0:
+                yield {"text": current_string}
+
 dataset = Dataset.from_generator(gen)
 
 print('dataset load')
@@ -116,8 +135,8 @@ from trl import SFTTrainer, SFTConfig
 
 sft_config = SFTConfig(
     output_dir="./results3",
-    num_train_epochs=1, # Total number of training epochs to perform (if not an integer, will perform the decimal part percents of the last epoch before stopping training).
-    per_device_train_batch_size=4, # The batch size per GPU/XPU/TPU/MPS/NPU core/CPU for training.
+    num_train_epochs=10, # Total number of training epochs to perform (if not an integer, will perform the decimal part percents of the last epoch before stopping training).
+    per_device_train_batch_size=2, # The batch size per GPU/XPU/TPU/MPS/NPU core/CPU for training.
     gradient_accumulation_steps=1, # Number of updates steps to accumulate the gradients for, before performing a backward/update pass.
     optim="paged_adamw_32bit", #The optimizer to use: adamw_hf, adamw_torch, adamw_torch_fused, adamw_apex_fused, adamw_anyprecision or adafactor.
     save_steps=50, # Number of updates steps before two checkpoint saves if `save_strategy="steps"`. Should be an integer or a float in range `[0,1)`. If smaller than 1, will be interpreted as ratio of total training steps.
@@ -133,16 +152,16 @@ sft_config = SFTConfig(
     lr_scheduler_type="constant", # The scheduler type to use. See the documentation of [`SchedulerType`] for all possible values.
     report_to="tensorboard", # The list of integrations to report the results and logs to. Supported platforms are `"azure_ml"`, `"clearml"`, `"codecarbon"`, `"comet_ml"`, `"dagshub"`, `"dvclive"`, `"flyte"`, `"mlflow"`, `"neptune"`, `"tensorboard"`, and `"wandb"`. Use `"all"` to report to all integrations installed, `"none"` for no integrations.
     dataset_text_field="text", # The name of the text field of the dataset, in case this is passed by a user, the trainer will automatically create a `ConstantLengthDataset` based on the `dataset_text_field` argument. Defaults to None.
-    max_seq_length=1024, # The maximum sequence length to use for the `ConstantLengthDataset` and for automatically creating the Dataset. Defaults to min of the smaller of the `tokenizer.model_max_length` and `1024`.
+    max_seq_length=2048, # The maximum sequence length to use for the `ConstantLengthDataset` and for automatically creating the Dataset. Defaults to min of the smaller of the `tokenizer.model_max_length` and `1024`.
     packing=False, # Used only in case `dataset_text_field` is passed. This argument is used by the `ConstantLengthDataset` to pack the sequences of the dataset. Defaults to False.
 )
 
 trainer = SFTTrainer(
     model=model,
     # train_dataset=dataset.select([0, 10, 20, 30, 40, 50]),
-    train_dataset=dataset.select([0, 1, 2, 3, 4, 5]),
+    # train_dataset=dataset.select([0, 1, 2, 3, 4, 5]),
     # train_dataset=dataset.select([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]),
-    # train_dataset=dataset,
+    train_dataset=dataset,
     args=sft_config,
     peft_config=peft_params,
     tokenizer=tokenizer,
